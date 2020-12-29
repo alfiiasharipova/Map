@@ -19,6 +19,8 @@ public class FileOpen {
     }
 
     public Set<String> getAppByExtension(String extension) {
+        if (!getExtensions().contains(extension))
+            return null;
         Set<String> result = new HashSet<>();
         for (Map.Entry<String, Set<String>> entry : fileOpen.entrySet()) {
             for (String ext : entry.getValue()) {
@@ -32,12 +34,14 @@ public class FileOpen {
     }
 
     public void deleteTie(String name, String extension) {
-        Set<String> temp = new HashSet<>(fileOpen.get(name));
+        Set<String> temp = fileOpen.get(name);
+        if(temp == null || !temp.contains(extension))
+            return;
         temp.remove(extension.toLowerCase());
         if (temp.isEmpty())
             fileOpen.remove(name);
          else
-            fileOpen.put(name, temp);
+            fileOpen.replace(name, temp);
     }
 
     public Set<String> getApps() {
